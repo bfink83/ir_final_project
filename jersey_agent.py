@@ -6,11 +6,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
-from email.mime.multipart import MIMEMultipart
-from bs4 import BeautifulSoup
-from urllib import parse, request
 
 options = Options()
 options.add_argument('--headless')
@@ -100,5 +95,5 @@ for url in url_list:
 
     browser.close()
     browser.quit()
-  except:
-    print("COULD NOT FIND")
+  except Exception as e:
+      print(e, url)
