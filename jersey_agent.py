@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 import time
 
 options = Options()
-# options.add_argument('--headless')
+options.headless = True
 options.add_argument('window-size=1100,700')
 
 # url_list = ['https://www.nflshop.com/', 'https://www.fanatics.com/', 'https://www.lids.com/']
@@ -96,6 +96,13 @@ for url in url_list:
     print(item_dict)
   except Exception as e:
       print(e, url)
+
+sorted_dict = sorted(item_dict.items(), key=lambda x: x[1])
+lowestKey = list(sorted_dict)[0][0]
+print(lowestKey)
+options.headless = False
+print(item_dict.get(lowestKey)[0])
+browser.get(item_dict.get(lowestKey)[0])
 
 browser.close()
 browser.quit()
