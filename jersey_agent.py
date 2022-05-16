@@ -8,10 +8,11 @@ from selenium.webdriver.common.by import By
 import time
 
 options = Options()
-options.add_argument('--headless')
+# options.add_argument('--headless')
 options.add_argument('window-size=1100,700')
 
-url_list = ['https://www.nflshop.com/', 'https://www.fanatics.com/']
+# url_list = ['https://www.nflshop.com/', 'https://www.fanatics.com/', 'https://www.lids.com/']
+url_list = ['https://www.nflshop.com/']
 nflshop_searchbox = fanatics_searchbox = 'typeahead-input'
 nflshop_searchSubmit = fanatics_searchSubmit = 'typeahead-go'
 
@@ -52,6 +53,8 @@ size = "Men"
 color = "Blue"
 team = "Bills"
 
+start = time.time()
+
 browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 print("INSTALLING DRIVER")
 
@@ -80,21 +83,23 @@ for url in url_list:
   item_dict = {}
 
   try:
-    items = browser.find_elements(by=By.CLASS_NAME, value='product-card-title a')
+    items = browser.find_elements(by=By.CLASS_NAME, value='product-card')
     for item in items:
-      itemTitle = item.get_attribute('title')
+      itemLink = item.find_element(by=By.CLASS_NAME, value='product-card-title a')
+      itemTitle = itemLink.get_attribute('title')
       if "Custom" not in itemTitle:
-        itemLink = item.get_attribute('href')
-        item_dict[itemTitle] = [itemLink]
+        itemURL = itemLink.get_attribute('href')
+        price_div = item.find_element(by=By.CSS_SELECTOR, value="span[class='sr-only']")
+        price = price_div.get_attribute('innerText')
+        item_dict[itemTitle] = [itemURL, price]
 
-    for k,v in item_dict.items():
-      browser.get(v[0])
-      price_div = browser.find_element(By.CSS_SELECTOR, value = "span[class='sr-only']")
-      price = price_div.get_attribute('innerText')
-      item_dict[k].append(price)
-
-    browser.close()
+    print(item_dict)
   except Exception as e:
       print(e, url)
 
+browser.close()
 browser.quit()
+
+end = time.time()
+
+print("Time: ", end - start)
