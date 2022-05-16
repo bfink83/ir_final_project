@@ -8,8 +8,8 @@ from selenium.webdriver.common.by import By
 import time
 
 options = Options()
-# options.headless = True
-options.headless = False
+options.headless = True
+# options.headless = False
 options.add_argument("start-maximized")
 options.add_argument("disable-infobars")
 options.add_argument("--disable-extensions")
@@ -64,7 +64,7 @@ print(name)
 while True:
   size = input("Men, Women, or Youth Jersey?: ")
   size = size.lower().title()
-  print(size == 'Youth')
+#   print(size == 'Youth')
   if size != 'Men' and size != 'Women' and size != 'Youth':
     print("Please input one of the size options above.")
     continue
@@ -141,7 +141,7 @@ browser.quit()
 
 proceed = input("Would you like to continue to purchase?(y/n) " )
 if proceed == "y":
-    jerseySize = input("Enter jersey size: ")
+    jerseySize = input("Enter jersey size (ex. '2XL'): ")
     color = input("Enter jersey color: ")
 
 
@@ -153,6 +153,10 @@ if proceed == "y":
     else:
         browser2.get(item_dict.get(lowestJerseys[0])[0])
 
+    # sizeSelector = browser2.find_element_by_class_name('size-selector-list')
+    
+    browser2.find_element(by=By.LINK_TEXT, value=(jerseySize)).click()
+    
     browser2.close()
     browser2.quit()
 
