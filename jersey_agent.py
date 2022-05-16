@@ -13,25 +13,29 @@ from email.mime.multipart import MIMEMultipart
 from bs4 import BeautifulSoup
 
 options = Options()
-options.add_argument('--headless')
-# browser = webdriver.Chrome(CHROMEDRIVER_PATH, chrome_options=options)
+# options.add_argument('--headless')
 
 url = 'https://www.nflshop.com/'
 nflshop_searchbox = 'typeahead-input'
 nflshop_searchSubmit = 'typeahead-go'
 
+q1 = input("Enter player name: ")
+q2 = input("Men's, Women's, or Youth Jersey?: ")
+q3 = input("Enter jersey color: ")
+
 
 browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 print("INSTALLING DRIVER")
 
-query_terms = ["Stefon Diggs", "Men's", "Blue"]
+# query_terms = ["Stefon Diggs", "Men's", "Blue"]
+query_terms = [q1, q2, q3]
 
 def formulateQuery(query_terms):
   query = ''
   for q in query_terms:
-    query = query + q
+    query = query + " " + q
 
-  query = query + "Jerseys"
+  query = query + " Jerseys"
 
   return query
 
