@@ -94,6 +94,7 @@ for url in url_list:
       item_dict[k].append(price)
 
     browser.close()
-    browser.quit()
   except Exception as e:
       print(e, url)
+
+browser.quit()
