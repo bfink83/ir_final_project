@@ -65,14 +65,6 @@ for url in url_list:
   time.sleep(5)
   print("WAITING FOR POPUP TO CLOSE")
 
-  # searchbox = browser.find_element(by=By.CLASS_NAME, value=nflshop_searchbox)
-  # searchbox.clear()
-  # searchbox.send_keys(name)
-  # print("QUERY INPUTTED TO SEARCH BAR")
-
-  # browser.find_element(by=By.CLASS_NAME, value=nflshop_searchSubmit).click()
-  # print("SEARCHING")
-
   if 'nflshop' in url:
     search(nflshop_searchbox, nflshop_searchSubmit, name, browser)
     nflShopFilter(size, team, name, browser)
@@ -99,13 +91,16 @@ for url in url_list:
 
 sorted_dict = sorted(item_dict.items(), key=lambda x: x[1])
 lowestKey = list(sorted_dict)[0][0]
-print(lowestKey)
-options.headless = False
-print(item_dict.get(lowestKey)[0])
-browser.get(item_dict.get(lowestKey)[0])
 
 browser.close()
 browser.quit()
+
+options.headless = False
+browser2 = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+browser2.get(item_dict.get(lowestKey)[0])
+
+browser2.close()
+browser2.quit()
 
 end = time.time()
 
