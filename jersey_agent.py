@@ -1,3 +1,4 @@
+from distutils.spawn import find_executable
 import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -156,13 +157,25 @@ if proceed == "y":
     
     time.sleep(5)
 
+    size_in_stock = browser2.find_element(by=By.LINK_TEXT, value=(jerseySize))
+
     while True:
-      try:
-        browser2.find_element(by=By.LINK_TEXT, value=(jerseySize)).click()
-        break
-      except:
-        jerseySize = input("Size out of stock. Please select another size: ")
+      if "unavailable" in size_in_stock.get_attribute("class"):
+        input("Size out of stock. Please Select Another: ")
         continue
+      else:
+        size_in_stock.click()
+        break
+
+    print("ADDED TO CART.")
+
+    # while True:
+    #   try:
+    #     browser2.find_element(by=By.LINK_TEXT, value=(jerseySize)).click()
+    #     break
+    #   except:
+    #     jerseySize = input("Size out of stock. Please select another size: ")
+    #     continue
     
     browser2.close()
     browser2.quit()
