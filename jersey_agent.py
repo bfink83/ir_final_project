@@ -13,7 +13,8 @@ from bs4 import BeautifulSoup
 from urllib import parse, request
 
 options = Options()
-# options.add_argument('--headless')
+options.add_argument("window-size=1100,700")
+options.add_argument('--headless')
 
 # url = 'https://www.nflshop.com/'
 url = 'https://www.fanatics.com/'
@@ -60,13 +61,6 @@ browser.find_element(by=By.PARTIAL_LINK_TEXT, value=("View all players")).click(
 browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(name)).click()
 print("NARROWING SEARCH")
 
-
-
-# items = browser.find_elements(by=By.CLASS_NAME, value='product-card-title a')
-# item1 = items[0]
-# itemHTML = item1.get_attribute('title')
-# print(itemHTML)
-
 item_dict = {}
 
 try:
@@ -77,19 +71,11 @@ try:
       itemLink = item.get_attribute('href')
       item_dict[itemTitle] = [itemLink]
 
-  print(item_dict)
-  print(len(item_dict))
-
   for k,v in item_dict.items():
     browser.get(v[0])
     price_div = browser.find_element(By.CSS_SELECTOR, value = "span[class='sr-only']")
-    # find_element_by_css_selector("span[class='sr-only']")
     price = price_div.get_attribute('innerText')
-    item_dict[k] += str(price)
-    # print(price)
-  
-  print(item_dict)
-
+    item_dict[k].append(price)
 
   browser.close()
   browser.quit()
