@@ -127,12 +127,21 @@ lowestKey = list(sorted_dict)[0][0]
 # print(item_dict.get(lowestKey)[1])
 lowestJerseys = [k for k,v in item_dict.items() if v[1] == item_dict.get(lowestKey)[1]]
 lowJlen = len(lowestJerseys)
+
 print("These jerseys were found at the same price of", item_dict.get(lowestKey)[1])
 print(lowestJerseys)
+color = input("Please select a jersey color from the list: ")
+coloredJerseys = []
+for j in lowestJerseys:
+    if color in j:
+        coloredJerseys.append(j)
+colJlen = len(coloredJerseys)
+print(coloredJerseys)
 
-if lowJlen > 1:
+
+if colJlen > 1:
     # print(lowestJerseys)
-    print("Please select a jersey as # 1 -", (lowJlen + 1), end='')
+    print("Please select a jersey as # 1 -", colJlen, end='')
     selectedJersey = int(input(": "))
 
 
@@ -142,20 +151,20 @@ browser.quit()
 proceed = input("Would you like to continue to purchase?(y/n) " )
 if proceed == "y":
     jerseySize = input("Enter jersey size (ex. '2XL'): ")
-    color = input("Enter jersey color: ")
-
 
     options.headless = False
-    print(item_dict.get(lowestJerseys[selectedJersey - 1])[0])
+    # print(item_dict.get(lowestJerseys[selectedJersey - 1])[0])
     browser2 = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    if lowJlen > 1:
-        browser2.get(item_dict.get(lowestJerseys[selectedJersey - 1])[0])
+    if colJlen > 1:
+        browser2.get(item_dict.get(coloredJerseys[selectedJersey - 1])[0])
     else:
-        browser2.get(item_dict.get(lowestJerseys[0])[0])
-
-    # sizeSelector = browser2.find_element_by_class_name('size-selector-list')
+        browser2.get(item_dict.get(coloredJerseys[0])[0])
     
+    time.sleep(5)
     browser2.find_element(by=By.LINK_TEXT, value=(jerseySize)).click()
+    # browser2.find_element(by=By.CSS_SELECTOR, value="div[aria-label~='White']")
+    # browser2.find_element(by=By.xpath("//a[@aria-label='Royal from  1 of 3 Colors'"))
+    # browser2.execute_script("arguments[0].click();", el)
     
     browser2.close()
     browser2.quit()
