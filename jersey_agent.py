@@ -8,8 +8,22 @@ from selenium.webdriver.common.by import By
 import time
 
 options = Options()
-options.headless = True
+# options.headless = True
+options.headless = False
+options.add_argument("start-maximized")
+options.add_argument("disable-infobars")
+options.add_argument("--disable-extensions")
 options.add_argument('window-size=1100,700')
+
+nfl_teams = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens',
+  'Buffalo Bills', 'Carolina Panthers', 'Chicago Bears', 'Cincinnati Bengals',
+  'Cleveland Browns', 'Dallas Cowboys', 'Denver Broncos', 'Detroit Lions', 
+  'Green Bay Packers', 'Houston Texans', 'Indianapolis Colts', 'Jacksonville Jaguars',
+  'Kansas City Chiefs', 'Las Vegas Raiders', 'Los Angeles Chargers', 'Los Angeles Rams',
+  'Miami Dolphins', 'Minnesota Vikings', 'New England Patriots', 'New Orleans Saints', 
+  'New York Giants', 'New York Jets', 'Philadelphia Eagles', 'Pittsburgh Steelers',
+  'San Francisco 49ers', 'Seattle Seahawks', 'Tampa Bay Buccaneers', 'Tennessee Titans',
+  'Washington Commanders']
 
 # url_list = ['https://www.nflshop.com/', 'https://www.fanatics.com/', 'https://www.lids.com/']
 url_list = ['https://www.nflshop.com/']
@@ -43,10 +57,29 @@ def fanaticsLidsFilter(size, team, name, browser):
   browser.find_element(by=By.PARTIAL_LINK_TEXT, value=("View all players")).click()
   browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(name)).click()
 
-# name = input("Enter player name: ")
-# size = input("Men, Women, or Youth Jersey?: ")
-# color = input("Enter jersey color: ")
-# team = input("Enter desired player team: ")
+
+name = input("Enter player name: ")
+name = name.lower().title()
+print(name)
+while True:
+  size = input("Men, Women, or Youth Jersey?: ")
+  size = size.lower().title()
+  print(size == 'Youth')
+  if size != 'Men' and size != 'Women' and size != 'Youth':
+    print("Please input one of the size options above.")
+    continue
+  else:
+    break
+
+while True:
+  team = input("Enter desired player team: ")
+  team = team.lower().title()
+  team = [t for t in nfl_teams if team in t][0]
+  if team not in nfl_teams:
+    print("Please input an NFL team.")
+    continue
+  else:
+    break
 
 name = "Diggs"
 size = "Men"
