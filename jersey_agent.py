@@ -64,7 +64,6 @@ print(name)
 while True:
   size = input("Men, Women, or Youth Jersey?: ")
   size = size.lower().title()
-#   print(size == 'Youth')
   if size != 'Men' and size != 'Women' and size != 'Youth':
     print("Please input one of the size options above.")
     continue
@@ -117,14 +116,11 @@ for url in url_list:
         price_div = item.find_element(by=By.CSS_SELECTOR, value="span[class='sr-only']")
         price = price_div.get_attribute('innerText')
         item_dict[itemTitle] = [itemURL, price]
-
-    # print(item_dict)
   except Exception as e:
       print(e, url)
 
 sorted_dict = sorted(item_dict.items(), key=lambda x: x[1])
 lowestKey = list(sorted_dict)[0][0]
-# print(item_dict.get(lowestKey)[1])
 lowestJerseys = [k for k,v in item_dict.items() if v[1] == item_dict.get(lowestKey)[1]]
 lowJlen = len(lowestJerseys)
 
@@ -140,7 +136,6 @@ print(coloredJerseys)
 
 
 if colJlen > 1:
-    # print(lowestJerseys)
     print("Please select a jersey as # 1 -", colJlen, end='')
     selectedJersey = int(input(": "))
 
@@ -153,7 +148,6 @@ if proceed == "y":
     jerseySize = input("Enter jersey size (ex. '2XL'): ")
 
     options.headless = False
-    # print(item_dict.get(lowestJerseys[selectedJersey - 1])[0])
     browser2 = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     if colJlen > 1:
         browser2.get(item_dict.get(coloredJerseys[selectedJersey - 1])[0])
@@ -161,10 +155,14 @@ if proceed == "y":
         browser2.get(item_dict.get(coloredJerseys[0])[0])
     
     time.sleep(5)
-    browser2.find_element(by=By.LINK_TEXT, value=(jerseySize)).click()
-    # browser2.find_element(by=By.CSS_SELECTOR, value="div[aria-label~='White']")
-    # browser2.find_element(by=By.xpath("//a[@aria-label='Royal from  1 of 3 Colors'"))
-    # browser2.execute_script("arguments[0].click();", el)
+
+    while True:
+      try:
+        browser2.find_element(by=By.LINK_TEXT, value=(jerseySize)).click()
+        break
+      except:
+        jerseySize = input("Size out of stock. Please select another size: ")
+        continue
     
     browser2.close()
     browser2.quit()
