@@ -118,22 +118,43 @@ for url in url_list:
         price = price_div.get_attribute('innerText')
         item_dict[itemTitle] = [itemURL, price]
 
-    print(item_dict)
+    # print(item_dict)
   except Exception as e:
       print(e, url)
 
 sorted_dict = sorted(item_dict.items(), key=lambda x: x[1])
 lowestKey = list(sorted_dict)[0][0]
+# print(item_dict.get(lowestKey)[1])
+lowestJerseys = [k for k,v in item_dict.items() if v[1] == item_dict.get(lowestKey)[1]]
+lowJlen = len(lowestJerseys)
+print("These jerseys were found at the same price of", item_dict.get(lowestKey)[1])
+print(lowestJerseys)
+
+if lowJlen > 1:
+    # print(lowestJerseys)
+    print("Please select a jersey as # 1 -", (lowJlen + 1), end='')
+    selectedJersey = int(input(": "))
+
 
 browser.close()
 browser.quit()
 
-options.headless = False
-browser2 = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-browser2.get(item_dict.get(lowestKey)[0])
+proceed = input("Would you like to continue to purchase?(y/n) " )
+if proceed == "y":
+    jerseySize = input("Enter jersey size: ")
+    color = input("Enter jersey color: ")
 
-browser2.close()
-browser2.quit()
+
+    options.headless = False
+    print(item_dict.get(lowestJerseys[selectedJersey - 1])[0])
+    browser2 = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    if lowJlen > 1:
+        browser2.get(item_dict.get(lowestJerseys[selectedJersey - 1])[0])
+    else:
+        browser2.get(item_dict.get(lowestJerseys[0])[0])
+
+    browser2.close()
+    browser2.quit()
 
 end = time.time()
 
