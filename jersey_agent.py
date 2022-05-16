@@ -6,7 +6,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
-import smtplib, ssl, os
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
@@ -19,28 +18,14 @@ url = 'https://www.nflshop.com/'
 nflshop_searchbox = 'typeahead-input'
 nflshop_searchSubmit = 'typeahead-go'
 
-q1 = input("Enter player name: ")
-q2 = input("Men's, Women's, or Youth Jersey?: ")
-q3 = input("Enter jersey color: ")
+name = input("Enter player name: ")
+size = input("Men, Women, or Youth Jersey?: ")
+color = input("Enter jersey color: ")
+team = input("Enter desired player team: ")
 
 
 browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 print("INSTALLING DRIVER")
-
-# query_terms = ["Stefon Diggs", "Men's", "Blue"]
-query_terms = [q1, q2, q3]
-
-def formulateQuery(query_terms):
-  query = ''
-  for q in query_terms:
-    query = query + " " + q
-
-  query = query + " Jerseys"
-
-  return query
-
-
-query = formulateQuery(query_terms)
 
 browser.get(url)
 print("URL OPENED")
@@ -48,30 +33,36 @@ print("URL OPENED")
 time.sleep(5)
 print("WAITING FOR POPUP TO CLOSE")
 
-# try:
-#   popButton = browser.find_element_by_xpath('//*[@id="once-per-session___BV_modal_footer_"]/button').click()
-# except:
-#   pass
-
 searchbox = browser.find_element(by=By.CLASS_NAME, value=nflshop_searchbox)
 searchbox.clear()
-searchbox.send_keys(query)
+searchbox.send_keys(name)
 print("QUERY INPUTTED TO SEARCH BAR")
 
 browser.find_element(by=By.CLASS_NAME, value=nflshop_searchSubmit).click()
 print("SEARCHING")
+
+browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(team)).click()
+browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(size)).click()
+browser.find_element(by=By.PARTIAL_LINK_TEXT, value=("Jerseys")).click()
+browser.find_element(by=By.PARTIAL_LINK_TEXT, value=("View all players")).click()
+browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(name)).click()
+print("NARROWING SEARCH")
 
 items = browser.find_elements(by=By.CLASS_NAME, value='product-card-title a')
 item1 = items[0]
 itemHTML = item1.get_attribute('title')
 print(itemHTML)
 
-itemTitles = []
+item_dict = {}
 try:
   items = browser.find_elements(by=By.CLASS_NAME, value='product-card-title a')
   for item in items:
     itemTitle = item.get_attribute('title')
-    itemTitles.append(itemTitle)
-  print(itemTitles)
+    if "Custom" not in itemTitle:
+      itemLink = item.get_attribute('href')
+      item_dict[itemTitle] = itemLink
+
+  print(item_dict)
+  print(len(item_dict))
 except:
   print("COULD NOT FIND")
