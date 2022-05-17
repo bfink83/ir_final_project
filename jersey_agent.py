@@ -94,8 +94,8 @@ while True:
 
 start = time.time()
 
-browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 print("INSTALLING DRIVER")
+browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 item_dict = {}
 
@@ -103,8 +103,8 @@ for url in url_list:
   browser.get(url)
   print("URL OPENED")
 
-  time.sleep(5)
   print("WAITING FOR POPUP TO CLOSE")
+  time.sleep(5)
 
   if 'nflshop' in url:
     search(nflshop_searchbox, nflshop_searchSubmit, name, browser)
