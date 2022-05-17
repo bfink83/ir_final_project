@@ -123,7 +123,10 @@ for url in url_list:
 sorted_dict = sorted(item_dict.items(), key=lambda x: x[1])
 lowestKey = list(sorted_dict)[0][0]
 lowestJerseys = [k for k,v in item_dict.items() if v[1] == item_dict.get(lowestKey)[1]]
-lowestUrls = [v for k,v in item_dict.items() if k == lowestKey]
+lowestUrls = []
+for a in lowestJerseys:
+    string1 = item_dict.get(a)[0]
+    lowestUrls.append(string1.rpartition('.com')[0])
 
 titlesAndUrls = []
 i = 0
@@ -180,9 +183,6 @@ if proceed == "y":
     # time.sleep(3)
     # browser2.find_element(by=By.XPATH, value=('//button[@data-talos="buttonAddToCart"]')).click()
     # print("ADDED TO CART.")
-    
-    # browser2.close()
-    # browser2.quit()
 
 end = time.time()
 
