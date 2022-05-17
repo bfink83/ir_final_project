@@ -73,7 +73,6 @@ def lidsFilter(size, team, name, browser):
 
 name = input("Enter player name: ")
 name = name.lower().title()
-print(name)
 while True:
   size = input("Men, Women, or Youth Jersey?: ")
   size = size.lower().title()
