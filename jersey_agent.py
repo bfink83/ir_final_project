@@ -94,8 +94,8 @@ while True:
 
 start = time.time()
 
-print("INSTALLING DRIVER")
 browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+print("INSTALLING DRIVER")
 
 item_dict = {}
 
