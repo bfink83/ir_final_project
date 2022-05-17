@@ -1,4 +1,5 @@
 from distutils.spawn import find_executable
+import sys
 import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -26,8 +27,8 @@ nfl_teams = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens',
   'San Francisco 49ers', 'Seattle Seahawks', 'Tampa Bay Buccaneers', 'Tennessee Titans',
   'Washington Commanders']
 
-# url_list = ['https://www.nflshop.com/', 'https://www.fanatics.com/', 'https://www.lids.com/']
-url_list = ['https://www.nflshop.com/']
+url_list = ['https://www.nflshop.com/', 'https://www.fanatics.com/', 'https://www.lids.com/']
+# url_list = ['https://www.nflshop.com/']
 nflshop_searchbox = fanatics_searchbox = 'typeahead-input'
 nflshop_searchSubmit = fanatics_searchSubmit = 'typeahead-go'
 
@@ -81,15 +82,12 @@ while True:
   else:
     break
 
-name = "Diggs"
-size = "Men"
-color = "Blue"
-team = "Bills"
-
 start = time.time()
 
 browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 print("INSTALLING DRIVER")
+
+item_dict = {}
 
 for url in url_list:
   browser.get(url)
@@ -105,8 +103,6 @@ for url in url_list:
     search(fanatics_searchbox, fanatics_searchSubmit, name, browser)
     fanaticsLidsFilter(size, team, name, browser)
 
-  item_dict = {}
-
   try:
     items = browser.find_elements(by=By.CLASS_NAME, value='product-card')
     for item in items:
@@ -120,6 +116,10 @@ for url in url_list:
   except Exception as e:
       print(e, url)
 
+# if len(item_dict) == 0:
+#     print('No listings found')
+#     sys.exit()
+
 sorted_dict = sorted(item_dict.items(), key=lambda x: x[1])
 lowestKey = list(sorted_dict)[0][0]
 lowestJerseys = [k for k,v in item_dict.items() if v[1] == item_dict.get(lowestKey)[1]]
@@ -132,7 +132,6 @@ titlesAndUrls = []
 i = 0
 for title in lowestJerseys:
     titlesAndUrls.append([title, lowestUrls[i]])
-    print(i)
     i += 1
 lowJlen = len(lowestJerseys)
 
