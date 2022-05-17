@@ -123,15 +123,23 @@ for url in url_list:
 sorted_dict = sorted(item_dict.items(), key=lambda x: x[1])
 lowestKey = list(sorted_dict)[0][0]
 lowestJerseys = [k for k,v in item_dict.items() if v[1] == item_dict.get(lowestKey)[1]]
+lowestUrls = [v for k,v in item_dict.items() if k == lowestKey]
+
+titlesAndUrls = []
+i = 0
+for title in lowestJerseys:
+    titlesAndUrls.append([title, lowestUrls[i]])
+    print(i)
+    i += 1
 lowJlen = len(lowestJerseys)
 
 print("These jerseys were found at the same price of", item_dict.get(lowestKey)[1])
-print(lowestJerseys)
-color = input("Please select a jersey color from the list: ")
+print(titlesAndUrls)
+color = input("Please select desired color from the list: ")
 coloredJerseys = []
-for j in lowestJerseys:
-    if color in j:
-        coloredJerseys.append(j)
+for j in titlesAndUrls:
+    if color in j[0]:
+        coloredJerseys.append([j[0], j[1]])
 colJlen = len(coloredJerseys)
 print(coloredJerseys)
 
@@ -167,10 +175,11 @@ if proceed == "y":
         size_in_stock.click()
         break
 
+    #For implementing full functonality in purchasing the product
     # browser2.find_element(by=By.CLASS_NAME, value=("button large team-primary-colors primary")).click()
-    time.sleep(3)
-    browser2.find_element(by=By.XPATH, value=('//button[@class="button large team-primary-colors primary"]')).click()
-    print("ADDED TO CART.")
+    # time.sleep(3)
+    # browser2.find_element(by=By.XPATH, value=('//button[@data-talos="buttonAddToCart"]')).click()
+    # print("ADDED TO CART.")
     
     # browser2.close()
     # browser2.quit()
