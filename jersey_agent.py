@@ -29,6 +29,7 @@ nfl_teams = ['Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens',
 
 url_list = ['https://www.nflshop.com/', 'https://www.fanatics.com/', 'https://www.lids.com/']
 # url_list = ['https://www.nflshop.com/']
+# url_list = ['https://www.lids.com/']
 nflshop_searchbox = fanatics_searchbox = 'typeahead-input'
 nflshop_searchSubmit = fanatics_searchSubmit = 'typeahead-go'
 
@@ -49,12 +50,22 @@ def nflShopFilter(size, team, name, browser):
   browser.find_element(by=By.PARTIAL_LINK_TEXT, value=("View all players")).click()
   browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(name)).click()
 
-def fanaticsLidsFilter(size, team, name, browser):
+def fanaticsFilter(size, team, name, browser):
   print("NARROWING SEARCH")
   browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(size)).click()
   browser.find_element(by=By.PARTIAL_LINK_TEXT, value=("Jerseys")).click()
   elements = browser.find_elements(by=By.PARTIAL_LINK_TEXT, value = ("NFL"))
   elements[1].click()
+  browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(team)).click()
+  browser.find_element(by=By.PARTIAL_LINK_TEXT, value=("View all players")).click()
+  browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(name)).click()
+
+def lidsFilter(size, team, name, browser):
+  print("NARROWING SEARCH")
+  elements = browser.find_elements(by=By.PARTIAL_LINK_TEXT, value = ("NFL"))
+  elements[1].click()
+  browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(size)).click()
+  browser.find_element(by=By.PARTIAL_LINK_TEXT, value=("Jerseys")).click()
   browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(team)).click()
   browser.find_element(by=By.PARTIAL_LINK_TEXT, value=("View all players")).click()
   browser.find_element(by=By.PARTIAL_LINK_TEXT, value=(name)).click()
@@ -99,9 +110,12 @@ for url in url_list:
   if 'nflshop' in url:
     search(nflshop_searchbox, nflshop_searchSubmit, name, browser)
     nflShopFilter(size, team, name, browser)
-  elif 'fanatics' in url or 'lids' in url:
+  elif 'fanatics' in url:
     search(fanatics_searchbox, fanatics_searchSubmit, name, browser)
-    fanaticsLidsFilter(size, team, name, browser)
+    fanaticsFilter(size, team, name, browser)
+  elif 'lids' in url:
+    search(fanatics_searchbox, fanatics_searchSubmit, name, browser)
+    lidsFilter(size, team, name, browser)
 
   try:
     items = browser.find_elements(by=By.CLASS_NAME, value='product-card')
@@ -158,9 +172,10 @@ if proceed == "y":
     options.add_experimental_option("detach", True)
     browser2 = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     if colJlen > 1:
-        browser2.get(item_dict.get(coloredJerseys[selectedJersey - 1])[0])
+        browser2.get(item_dict.get(coloredJerseys[selectedJersey - 1][0])[0])
     else:
-        browser2.get(item_dict.get(coloredJerseys[0])[0])
+        print(item_dict.get(coloredJerseys[0][0])[0])
+        browser2.get(item_dict.get(coloredJerseys[0][0])[0])
     
     time.sleep(5)
 
