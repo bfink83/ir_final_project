@@ -116,10 +116,6 @@ for url in url_list:
   except Exception as e:
       print(e, url)
 
-# if len(item_dict) == 0:
-#     print('No listings found')
-#     sys.exit()
-
 sorted_dict = sorted(item_dict.items(), key=lambda x: x[1])
 lowestKey = list(sorted_dict)[0][0]
 lowestJerseys = [k for k,v in item_dict.items() if v[1] == item_dict.get(lowestKey)[1]]
